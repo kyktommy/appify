@@ -1,0 +1,12 @@
+{
+  "name": "appify",
+  "version": "0.0.1",
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-jshint": "~0.1.0",
+    "grunt-contrib-uglify": "~0.2.0",
+    "grunt-mocha-phantomjs": "~0.2.7"
+  },
+  "author": "Kwan Yu Kit Tommy",
+  "license": "MIT"
+}
