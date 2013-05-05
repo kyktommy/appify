@@ -140,12 +140,12 @@ Model.extend = extend;
 
 /* *
  *
- * Controller
+ * Collection
  *
  * */
 
 // Constructor
-var Controller = Appify.Controller = function(protoProps) {
+var Collection = Appify.Collection = function(protoProps) {
   var self = this;
   var defaults = {
     contents: [],
@@ -159,8 +159,8 @@ var Controller = Appify.Controller = function(protoProps) {
   });
 };
 
-//Controller instance methods
-Controller.prototype = { 
+//Collection instance methods
+Collection.prototype = { 
 
   add: function(model) {
     this.contents.push(model);
@@ -230,6 +230,47 @@ View.prototype = {
   }
 };
 
+/* *
+ *
+ * Controller
+ *
+ * */
+Appify.controllers = {};
+
+var Controller = Appify.Controller = function(protoProps) {
+  $.extend(this, protoProps);
+  Appify.controllers[protoProps.name] = this;
+};
+
+
+/* *
+ *
+ * Router
+ *
+ * */
+
+var Router = Appify.Router = function(protoProps) {
+  var defaults = {
+    routingTable: {}
+  };
+  $.extend(this, defaults, protoProps);
+
+  var self = this;
+  // Prevent default action in not http link
+  $(document).on('click', 'a:not([href^="http"])', function(e) {
+    e.preventDefault();
+    var href = $(this).attr('href');
+
+    // lookup routing table 
+    var action = self.routingTable[href].split('#'),
+        controller = Appify.controllers[action[0]],
+        method = controller[action[1]];
+
+    // Execute the controller method
+    method.apply(controller);
+  });
+};
+
 
 /* *
  *
@@ -252,13 +293,3 @@ var Binding = Appify.Binding = function(fromPath, toPath) {
 
 })(jQuery, this, document);
 
-// TODO
-//   Controller: Routing
-//   binding: 1-way, 2-way
-//   Auto Ajax CRUD data
-
-// DONE
-//   Model: extend, create
-//   Event module
-//   Controller
-//   View: DOM event listen, get template element, render from template

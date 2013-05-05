@@ -115,12 +115,12 @@ describe('Event', function() {
  * Controller Test
  * */
 
-describe('Controller', function() {
+describe('Collection', function() {
   
   var newModel = new Appify.Model({name: 'may'})
   var added, removed;
 
-  var UserController = new Appify.Controller({
+  var UserCollection = new Appify.Collection({
     contents: [
       new Appify.Model({ name: 'john' }),
       new Appify.Model({ name: 'mary' }),
@@ -138,44 +138,44 @@ describe('Controller', function() {
 
   describe('contents', function() {
     it('should store correct number of models', function() { 
-      UserController.contents.should.have.length(3);
+      UserCollection.contents.should.have.length(3);
     });
   });
 
   describe('#add', function() { 
-    it('should able to add model to Controller', function() {
-      UserController.add(newModel);
-      UserController.contents.should.have.length(4);
+    it('should able to add model to Collection', function() {
+      UserCollection.add(newModel);
+      UserCollection.contents.should.have.length(4);
     });
   });
 
   describe('#remove', function() {
-    it('should able to remove model from Controller', function() {
-      UserController.remove(newModel);
-      UserController.contents.should.have.length(3);
+    it('should able to remove model from Collection', function() {
+      UserCollection.remove(newModel);
+      UserCollection.contents.should.have.length(3);
     });
 
     it('should return the removed model', function() {
-      UserController.add(newModel);
-      UserController.remove(newModel).should.equal(newModel);
+      UserCollection.add(newModel);
+      UserCollection.remove(newModel).should.equal(newModel);
     });
   });
 
-  describe('Controller Event', function() {
+  describe('Collection Event', function() {
     it('should able to register events', function() {
-      UserController._events.should.property('add');
-      UserController._events.should.property('remove');
+      UserCollection._events.should.property('add');
+      UserCollection._events.should.property('remove');
     });
     
     it('should trigger function when model is added', function() {
       added = false;
-      UserController.add(newModel);
+      UserCollection.add(newModel);
       added.should.equal(true);
     });
 
     it('should trigger function when model is removed', function() {
       removed = false; 
-      UserController.remove(newModel);
+      UserCollection.remove(newModel);
       removed.should.equal(true);
     });
   });
@@ -253,6 +253,49 @@ describe('View', function() {
     });
   });
 
+});
+
+describe('Controller', function() {
+  var UserController = new Appify.Controller({
+    'name': "UserController",
+    'index': function() {
+      return "controller#index"; 
+    }
+  });
+
+  it('should accept a list a functions', function() {
+    UserController.index().should.equal("controller#index");
+  });
+
+  it('should contained in controllers list', function() {
+    Appify.controllers["UserController"].name.should.equal("UserController");
+  });
+});
+
+describe('Router', function() {
+  var a = 0; 
+
+  var UserController = new Appify.Controller({
+    'name': "UserController",
+    'index': function() {
+      a = 1; 
+    }
+  });
+
+  var router = new Appify.Router({
+    routingTable: {
+      '/users': 'UserController#index'
+    }
+  });
+
+  it('should have added routes to routing table', function() {
+    router.routingTable['/users'].should.equal('UserController#index'); 
+  });
+
+  it('should invoke controller method when trigger the route', function() {
+    $('a#users').trigger('click');
+    a.should.equal(1);
+  });
 });
 
 describe('Binding', function() {
