@@ -242,7 +242,6 @@ var Controller = Appify.Controller = function(protoProps) {
   Appify.controllers[protoProps.name] = this;
 };
 
-
 /* *
  *
  * Router
@@ -259,8 +258,21 @@ var Router = Appify.Router = function(protoProps) {
   // Prevent default action in not http link
   $(document).on('click', 'a:not([href^="http"])', function(e) {
     e.preventDefault();
-    var href = $(this).attr('href');
+    var href = $(this).attr('href'),
+        title = $(this).data('title');
 
+    self.action(href, title);
+
+    // History
+    history.pushState({}, title , href);
+  });
+
+  // Controller action when back and forward history
+  window.onpopstate = action(event);
+};
+
+Router.prototype = {
+  action: function(title, href) {
     // lookup routing table 
     var action = self.routingTable[href].split('#'),
         controller = Appify.controllers[action[0]],
@@ -268,7 +280,7 @@ var Router = Appify.Router = function(protoProps) {
 
     // Execute the controller method
     method.apply(controller);
-  });
+  }
 };
 
 
