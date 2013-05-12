@@ -4,8 +4,13 @@ module.exports = function(grunt) {
       files: ['src/app.js']
    }, 
 
-   mocha_phantomjs: {
-     all: ['test/**/*.html']
+   mocha: {
+     all: {
+       src: ['test/index.html'],
+       options: {
+         run: true
+       }
+     }
    },
 
    uglify: {
@@ -18,7 +23,7 @@ module.exports = function(grunt) {
 
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-uglify');
-  grunt.loadNpmTasks('grunt-mocha-phantomjs');
+  grunt.loadNpmTasks('grunt-mocha');
 
-  grunt.task.registerTask('default', ['jshint', 'mocha_phantomjs', 'uglify']);
+  grunt.task.registerTask('default', ['jshint', 'mocha', 'uglify']);
 }

@@ -115,7 +115,7 @@ Model.prototype = {
   },
 
   set: function(attr, value) {
-    if (attr == null) { return this; }
+    if (attr === null) { return this; }
 
     var attrs,
         self = this;
@@ -261,20 +261,29 @@ var Router = Appify.Router = function(protoProps) {
     var href = $(this).attr('href'),
         title = $(this).data('title');
 
-    self.action(href, title);
+    self.action(title, href);
+    console.log(href);
 
     // History
-    history.pushState({}, title , href);
+    // only for supported web browser
+    // and need a server begin with http
+    if (document.location.href.match('^http') &&
+        typeof history.pushState == 'function') {
+      history.pushState({}, title , href);
+    }
   });
 
   // Controller action when back and forward history
-  window.onpopstate = action(event);
+  // only for supported web browser
+  if (window.onpopstate) {
+    window.onpopstate = action(event);
+  }
 };
 
 Router.prototype = {
   action: function(title, href) {
     // lookup routing table 
-    var action = self.routingTable[href].split('#'),
+    var action = this.routingTable[href].split('#'),
         controller = Appify.controllers[action[0]],
         method = controller[action[1]];
 

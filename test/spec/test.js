@@ -228,6 +228,7 @@ describe('View', function() {
 
     it('should trigger function when the view is clicked', function() {
       self_clicked = false;
+      // Simulate click event
       $el.trigger('click');
       self_clicked.should.equal(true);
     });
