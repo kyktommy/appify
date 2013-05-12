@@ -283,25 +283,5 @@ Router.prototype = {
   }
 };
 
-
-/* *
- *
- * Binding
- *
- * */
-
-var Map = Appify.Map = function() {
-};
-
-var Binding = Appify.Binding = function(fromPath, toPath) {
-  var defaults = {
-    oneWay: false,
-    from: fromPath,
-    to: toPath
-  };
-
-  $.extend(this, defaults);
-};
-
 })(jQuery, this, document);
 

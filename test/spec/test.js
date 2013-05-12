@@ -297,11 +297,3 @@ describe('Router', function() {
     a.should.equal(1);
   });
 });
-
-describe('Binding', function() {
-  describe('two-way binding', function() {
-    it('should able to bind 2 objects', function() {
-      
-    });
-  });
-});
